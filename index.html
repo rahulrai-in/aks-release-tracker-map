@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -7,12 +8,18 @@
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
     integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
   <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
 
     body {
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-      background: #0f1117;
-      color: #e4e4e7;
+      background: #f5f7fa;
+      color: #1e293b;
       height: 100vh;
       display: flex;
       flex-direction: column;
@@ -21,20 +28,21 @@
 
     /* ─── Header / Controls ─── */
     header {
-      background: #161822;
-      border-bottom: 1px solid #2a2d3a;
-      padding: 10px 20px;
+      background: linear-gradient(135deg, #1e3a5f 0%, #2563eb 100%);
+      border-bottom: none;
+      padding: 12px 24px;
       display: flex;
       align-items: center;
-      gap: 18px;
+      gap: 20px;
       flex-wrap: wrap;
       z-index: 1000;
+      box-shadow: 0 2px 12px rgba(37, 99, 235, 0.15);
     }
 
     header h1 {
-      font-size: 16px;
-      font-weight: 600;
-      color: #60a5fa;
+      font-size: 18px;
+      font-weight: 700;
+      color: #ffffff;
       white-space: nowrap;
       letter-spacing: -0.3px;
     }
@@ -42,26 +50,32 @@
     .controls {
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 12px;
       flex-wrap: wrap;
     }
 
     .control-group {
       display: flex;
       align-items: center;
-      gap: 5px;
+      gap: 6px;
+      background: rgba(255, 255, 255, 0.12);
+      border-radius: 8px;
+      padding: 4px 10px 4px 12px;
     }
 
     .control-group label {
-      font-size: 12px;
-      color: #94a3b8;
+      font-size: 11px;
+      color: rgba(255, 255, 255, 0.7);
       white-space: nowrap;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      font-weight: 600;
     }
 
     select {
-      background: #1e2030;
-      color: #e4e4e7;
-      border: 1px solid #3a3d4a;
+      background: rgba(255, 255, 255, 0.15);
+      color: #ffffff;
+      border: 1px solid rgba(255, 255, 255, 0.25);
       border-radius: 6px;
       padding: 5px 10px;
       font-size: 13px;
@@ -70,8 +84,20 @@
       max-width: 260px;
     }
 
-    select:hover { border-color: #60a5fa; }
-    select:focus { border-color: #60a5fa; box-shadow: 0 0 0 2px rgba(96,165,250,0.2); }
+    select option {
+      background: #1e3a5f;
+      color: #ffffff;
+    }
+
+    select:hover {
+      border-color: rgba(255, 255, 255, 0.5);
+      background: rgba(255, 255, 255, 0.22);
+    }
+
+    select:focus {
+      border-color: rgba(255, 255, 255, 0.6);
+      box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.15);
+    }
 
     .badge {
       font-size: 11px;
@@ -81,8 +107,16 @@
       white-space: nowrap;
     }
 
-    .badge-latest { background: #065f46; color: #6ee7b7; }
-    .badge-time   { background: #1e293b; color: #94a3b8; font-weight: 400; }
+    .badge-latest {
+      background: rgba(34, 197, 94, 0.2);
+      color: #86efac;
+    }
+
+    .badge-time {
+      background: rgba(255, 255, 255, 0.12);
+      color: rgba(255, 255, 255, 0.7);
+      font-weight: 400;
+    }
 
     /* ─── Map ─── */
     #map {
@@ -96,20 +130,21 @@
       bottom: 24px;
       right: 16px;
       z-index: 1000;
-      background: rgba(22, 24, 34, 0.92);
+      background: rgba(255, 255, 255, 0.95);
       backdrop-filter: blur(8px);
-      border: 1px solid #2a2d3a;
+      border: 1px solid #e2e8f0;
       border-radius: 8px;
       padding: 10px 14px;
       font-size: 12px;
       line-height: 1.8;
       pointer-events: auto;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
     }
 
     .legend-title {
       font-weight: 600;
       margin-bottom: 4px;
-      color: #94a3b8;
+      color: #64748b;
       font-size: 11px;
       text-transform: uppercase;
       letter-spacing: 0.5px;
@@ -132,34 +167,39 @@
     .summary-bar {
       display: flex;
       align-items: center;
-      gap: 14px;
+      gap: 16px;
       margin-left: auto;
       font-size: 12px;
+      color: rgba(255, 255, 255, 0.9);
     }
 
     .summary-stat {
       display: flex;
       align-items: center;
-      gap: 4px;
+      gap: 5px;
+      font-weight: 500;
     }
 
     .summary-dot {
-      width: 8px;
-      height: 8px;
+      width: 9px;
+      height: 9px;
       border-radius: 50%;
       flex-shrink: 0;
+      box-shadow: 0 0 4px rgba(0, 0, 0, 0.2);
     }
 
     /* ─── Popup overrides ─── */
     .leaflet-popup-content-wrapper {
-      background: #1e2030 !important;
-      color: #e4e4e7 !important;
+      background: #ffffff !important;
+      color: #1e293b !important;
       border-radius: 8px !important;
-      border: 1px solid #3a3d4a !important;
-      box-shadow: 0 8px 24px rgba(0,0,0,0.5) !important;
+      border: 1px solid #e2e8f0 !important;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12) !important;
     }
 
-    .leaflet-popup-tip { background: #1e2030 !important; }
+    .leaflet-popup-tip {
+      background: #ffffff !important;
+    }
 
     .leaflet-popup-content {
       margin: 12px 14px !important;
@@ -171,7 +211,7 @@
       font-weight: 600;
       font-size: 14px;
       margin-bottom: 6px;
-      color: #f1f5f9;
+      color: #0f172a;
     }
 
     .popup-row {
@@ -180,23 +220,29 @@
       gap: 16px;
     }
 
-    .popup-label { color: #94a3b8; }
+    .popup-label {
+      color: #64748b;
+    }
 
-    .popup-value { font-weight: 500; }
+    .popup-value {
+      font-weight: 500;
+    }
 
     .popup-link {
-      color: #60a5fa;
+      color: #2563eb;
       text-decoration: none;
     }
 
-    .popup-link:hover { text-decoration: underline; }
+    .popup-link:hover {
+      text-decoration: underline;
+    }
 
     /* ─── Loading state ─── */
     .loading-overlay {
       position: absolute;
       inset: 0;
       z-index: 2000;
-      background: rgba(15,17,23,0.85);
+      background: rgba(255, 255, 255, 0.85);
       display: flex;
       align-items: center;
       justify-content: center;
@@ -207,15 +253,22 @@
     .spinner {
       width: 36px;
       height: 36px;
-      border: 3px solid #2a2d3a;
-      border-top-color: #60a5fa;
+      border: 3px solid #e2e8f0;
+      border-top-color: #2563eb;
       border-radius: 50%;
       animation: spin 0.8s linear infinite;
     }
 
-    @keyframes spin { to { transform: rotate(360deg); } }
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
 
-    .loading-text { font-size: 14px; color: #94a3b8; }
+    .loading-text {
+      font-size: 14px;
+      color: #64748b;
+    }
 
     .error-message {
       position: absolute;
@@ -223,7 +276,7 @@
       left: 50%;
       transform: translate(-50%, -50%);
       z-index: 2000;
-      background: #1e2030;
+      background: #ffffff;
       border: 1px solid #ef4444;
       border-radius: 8px;
       padding: 20px 28px;
@@ -231,336 +284,359 @@
       max-width: 400px;
     }
 
-    .error-message h2 { color: #ef4444; font-size: 16px; margin-bottom: 8px; }
-    .error-message p { font-size: 13px; color: #94a3b8; }
+    .error-message h2 {
+      color: #ef4444;
+      font-size: 16px;
+      margin-bottom: 8px;
+    }
+
+    .error-message p {
+      font-size: 13px;
+      color: #64748b;
+    }
   </style>
 </head>
+
 <body>
 
-<header>
-  <h1>AKS Release Tracker</h1>
-  <div class="controls">
-    <div class="control-group">
-      <label for="section-select">Section</label>
-      <select id="section-select"></select>
+  <header>
+    <h1>AKS Release Tracker</h1>
+    <div class="controls">
+      <div class="control-group">
+        <label for="section-select">Section</label>
+        <select id="section-select"></select>
+      </div>
+      <div class="control-group">
+        <label for="component-select">Component</label>
+        <select id="component-select"></select>
+      </div>
+      <div class="control-group">
+        <label for="version-select">Version</label>
+        <select id="version-select"></select>
+      </div>
     </div>
-    <div class="control-group">
-      <label for="component-select">Component</label>
-      <select id="component-select"></select>
-    </div>
-    <div class="control-group">
-      <label for="version-select">Version</label>
-      <select id="version-select"></select>
-    </div>
+    <div class="summary-bar" id="summary-bar"></div>
+  </header>
+
+  <div id="map"></div>
+
+  <div class="loading-overlay" id="loading">
+    <div class="spinner"></div>
+    <div class="loading-text">Loading AKS release data&hellip;</div>
   </div>
-  <div class="summary-bar" id="summary-bar"></div>
-</header>
 
-<div id="map"></div>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+    integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
 
-<div class="loading-overlay" id="loading">
-  <div class="spinner"></div>
-  <div class="loading-text">Loading AKS release data&hellip;</div>
-</div>
+  <script>
+    /* ───────────────────────────────────────────────
+       Azure Region → [lat, lng] mapping
+       ─────────────────────────────────────────────── */
+    const REGION_COORDS = {
+      "Australia Central": [-35.31, 149.12],
+      "Australia Central 2": [-35.31, 149.42],
+      "Australia East": [-33.87, 151.21],
+      "Australia Southeast": [-37.81, 144.96],
+      "Austria East": [48.21, 16.37],
+      "Belgium Central": [50.85, 4.35],
+      "Brazil South": [-23.55, -46.63],
+      "Brazil Southeast": [-22.91, -43.17],
+      "Canada Central": [43.65, -79.38],
+      "Canada East": [46.81, -71.21],
+      "Central India": [18.52, 73.86],
+      "Central US": [41.60, -93.61],
+      "Chile Central": [-33.45, -70.67],
+      "China East 2": [31.23, 121.47],
+      "China East 3": [31.23, 121.87],
+      "China North 2": [39.90, 116.41],
+      "China North 3": [40.10, 116.81],
+      "Denmark East": [55.68, 12.57],
+      "East Asia": [22.32, 114.17],
+      "East US": [37.37, -79.82],
+      "East US 2": [36.67, -78.39],
+      "East US 3": [37.55, -78.00],
+      "France Central": [46.35, 2.60],
+      "France South": [43.60, 3.88],
+      "Germany North": [53.55, 9.99],
+      "Germany West Central": [50.11, 8.68],
+      "India South Central": [15.36, 78.47],
+      "Indonesia Central": [-6.21, 106.85],
+      "Israel Central": [32.09, 34.78],
+      "Israel Northwest": [32.79, 35.00],
+      "Italy North": [45.46, 9.19],
+      "Japan East": [35.68, 139.65],
+      "Japan West": [34.69, 135.50],
+      "Jio India Central": [21.15, 79.09],
+      "Jio India West": [19.08, 72.88],
+      "Korea Central": [37.57, 126.98],
+      "Korea South": [35.18, 129.08],
+      "Malaysia South": [1.50, 103.70],
+      "Malaysia West": [3.14, 101.69],
+      "Mexico Central": [19.43, -99.13],
+      "New Zealand North": [-36.85, 174.76],
+      "North Central US": [41.88, -87.63],
+      "North Europe": [53.35, -6.26],
+      "Northeast US 5": [42.36, -71.06],
+      "Norway East": [59.91, 10.75],
+      "Norway West": [58.97, 5.73],
+      "Poland Central": [52.23, 21.01],
+      "Qatar Central": [25.29, 51.53],
+      "South Africa North": [-25.75, 28.23],
+      "South Africa West": [-33.92, 18.42],
+      "South Central US": [29.42, -98.49],
+      "South Central US 2": [29.70, -97.80],
+      "South India": [12.97, 80.15],
+      "Southeast Asia": [1.35, 103.82],
+      "Southeast US": [33.75, -84.39],
+      "Southeast US 3": [33.45, -83.80],
+      "Southeast US 5": [34.05, -84.60],
+      "Southwest US": [36.17, -115.14],
+      "Spain Central": [40.42, -3.70],
+      "Sweden Central": [60.67, 17.14],
+      "Sweden South": [55.60, 13.00],
+      "Switzerland North": [47.45, 8.56],
+      "Switzerland West": [46.20, 6.14],
+      "Taiwan North": [25.03, 121.57],
+      "Taiwan North West": [24.80, 120.97],
+      "UAE Central": [24.45, 54.38],
+      "UAE North": [25.20, 55.27],
+      "UK South": [51.51, -0.13],
+      "UK West": [51.48, -3.18],
+      "US Gov Arizona": [33.45, -111.97],
+      "US Gov Texas": [29.76, -95.37],
+      "US Gov Virginia": [38.91, -77.50],
+      "West Central US": [40.76, -111.89],
+      "West Europe": [52.37, 4.90],
+      "West US": [37.78, -122.42],
+      "West US 2": [47.61, -122.33],
+      "West US 3": [33.45, -112.07],
+    };
 
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
-  integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    /* Pretty display names for sections */
+    const SECTION_LABELS = {
+      "RP": "Resource Provider",
+      "UbuntuImage": "Ubuntu Image",
+      "UbuntuSecurityPatch": "Ubuntu Security Patch",
+      "CBLMarinerImage": "Azure Linux Image",
+      "AzureLinuxSecurityPatch": "Azure Linux Security Patch",
+      "WindowsImage": "Windows Image",
+      "KubernetesSupportedVersions": "Kubernetes Supported Versions",
+      "CVEStatus": "CVE Status",
+    };
 
-<script>
-/* ───────────────────────────────────────────────
-   Azure Region → [lat, lng] mapping
-   ─────────────────────────────────────────────── */
-const REGION_COORDS = {
-  "Australia Central":     [-35.31, 149.12],
-  "Australia Central 2":   [-35.31, 149.42],
-  "Australia East":        [-33.87, 151.21],
-  "Australia Southeast":   [-37.81, 144.96],
-  "Austria East":          [48.21, 16.37],
-  "Belgium Central":       [50.85, 4.35],
-  "Brazil South":          [-23.55, -46.63],
-  "Brazil Southeast":      [-22.91, -43.17],
-  "Canada Central":        [43.65, -79.38],
-  "Canada East":           [46.81, -71.21],
-  "Central India":         [18.52, 73.86],
-  "Central US":            [41.60, -93.61],
-  "Chile Central":         [-33.45, -70.67],
-  "China East 2":          [31.23, 121.47],
-  "China East 3":          [31.23, 121.87],
-  "China North 2":         [39.90, 116.41],
-  "China North 3":         [40.10, 116.81],
-  "Denmark East":          [55.68, 12.57],
-  "East Asia":             [22.32, 114.17],
-  "East US":               [37.37, -79.82],
-  "East US 2":             [36.67, -78.39],
-  "East US 3":             [37.55, -78.00],
-  "France Central":        [46.35, 2.60],
-  "France South":          [43.60, 3.88],
-  "Germany North":         [53.55, 9.99],
-  "Germany West Central":  [50.11, 8.68],
-  "India South Central":   [15.36, 78.47],
-  "Indonesia Central":     [-6.21, 106.85],
-  "Israel Central":        [32.09, 34.78],
-  "Israel Northwest":      [32.79, 35.00],
-  "Italy North":           [45.46, 9.19],
-  "Japan East":            [35.68, 139.65],
-  "Japan West":            [34.69, 135.50],
-  "Jio India Central":     [21.15, 79.09],
-  "Jio India West":        [19.08, 72.88],
-  "Korea Central":         [37.57, 126.98],
-  "Korea South":           [35.18, 129.08],
-  "Malaysia South":        [1.50, 103.70],
-  "Malaysia West":         [3.14, 101.69],
-  "Mexico Central":        [19.43, -99.13],
-  "New Zealand North":     [-36.85, 174.76],
-  "North Central US":      [41.88, -87.63],
-  "North Europe":          [53.35, -6.26],
-  "Northeast US 5":        [42.36, -71.06],
-  "Norway East":           [59.91, 10.75],
-  "Norway West":           [58.97, 5.73],
-  "Poland Central":        [52.23, 21.01],
-  "Qatar Central":         [25.29, 51.53],
-  "South Africa North":    [-25.75, 28.23],
-  "South Africa West":     [-33.92, 18.42],
-  "South Central US":      [29.42, -98.49],
-  "South Central US 2":    [29.70, -97.80],
-  "South India":           [12.97, 80.15],
-  "Southeast Asia":        [1.35, 103.82],
-  "Southeast US":          [33.75, -84.39],
-  "Southeast US 3":        [33.45, -83.80],
-  "Southeast US 5":        [34.05, -84.60],
-  "Southwest US":          [36.17, -115.14],
-  "Spain Central":         [40.42, -3.70],
-  "Sweden Central":        [60.67, 17.14],
-  "Sweden South":          [55.60, 13.00],
-  "Switzerland North":     [47.45, 8.56],
-  "Switzerland West":      [46.20, 6.14],
-  "Taiwan North":          [25.03, 121.57],
-  "Taiwan North West":     [24.80, 120.97],
-  "UAE Central":           [24.45, 54.38],
-  "UAE North":             [25.20, 55.27],
-  "UK South":              [51.51, -0.13],
-  "UK West":               [51.48, -3.18],
-  "US Gov Arizona":        [33.45, -111.97],
-  "US Gov Texas":          [29.76, -95.37],
-  "US Gov Virginia":       [38.91, -77.50],
-  "West Central US":       [40.76, -111.89],
-  "West Europe":           [52.37, 4.90],
-  "West US":               [37.78, -122.42],
-  "West US 2":             [47.61, -122.33],
-  "West US 3":             [33.45, -112.07],
-};
+    /* Colors */
+    const C_LATEST = "#22c55e"; // green
+    const C_IN_PROGRESS = "#f59e0b"; // amber
+    const C_OLDER = "#64748b"; // slate gray
 
-/* Pretty display names for sections */
-const SECTION_LABELS = {
-  "RP":                       "Resource Provider",
-  "UbuntuImage":              "Ubuntu Image",
-  "UbuntuSecurityPatch":      "Ubuntu Security Patch",
-  "CBLMarinerImage":          "Azure Linux Image",
-  "AzureLinuxSecurityPatch":  "Azure Linux Security Patch",
-  "WindowsImage":             "Windows Image",
-  "KubernetesSupportedVersions": "Kubernetes Supported Versions",
-  "CVEStatus":                "CVE Status",
-};
+    /* ───────────────────────────────────────────────
+       App State
+       ─────────────────────────────────────────────── */
+    let appData = null;
+    let map = null;
+    let markersLayer = null;
+    let legendControl = null;
 
-/* Colors */
-const C_LATEST      = "#22c55e"; // green
-const C_IN_PROGRESS = "#f59e0b"; // amber
-const C_OLDER       = "#64748b"; // slate gray
+    /* ───────────────────────────────────────────────
+       Initialise Leaflet Map
+       ─────────────────────────────────────────────── */
+    function initMap() {
+      const mapContainer = document.getElementById("map");
+      const containerWidth = mapContainer.clientWidth;
+      const containerHeight = mapContainer.clientHeight;
+      const minZoomW = Math.ceil(Math.log2(containerWidth / 256));
+      const minZoomH = Math.ceil(Math.log2(containerHeight / 256));
+      const computedMinZoom = Math.max(minZoomW, minZoomH, 2);
 
-/* ───────────────────────────────────────────────
-   App State
-   ─────────────────────────────────────────────── */
-let appData = null;
-let map = null;
-let markersLayer = null;
-let legendControl = null;
+      const southWest = L.latLng(-85, -220);
+      const northEast = L.latLng(85, 220);
+      const bounds = L.latLngBounds(southWest, northEast);
 
-/* ───────────────────────────────────────────────
-   Initialise Leaflet Map
-   ─────────────────────────────────────────────── */
-function initMap() {
-  map = L.map("map", {
-    center: [25, 10],
-    zoom: 2,
-    minZoom: 2,
-    maxZoom: 10,
-    worldCopyJump: true,
-    zoomControl: true,
-  });
+      map = L.map("map", {
+        center: [30, 10],
+        zoom: computedMinZoom,
+        minZoom: computedMinZoom,
+        maxZoom: 10,
+        maxBounds: bounds,
+        maxBoundsViscosity: 1.0,
+        worldCopyJump: false,
+        zoomControl: true,
+      });
 
-  L.tileLayer("https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png", {
-    attribution:
-      '&copy; <a href="https://www.openstreetmap.org/copyright">OSM</a> &copy; <a href="https://carto.com/">CARTO</a>',
-    subdomains: "abcd",
-    maxZoom: 19,
-  }).addTo(map);
+      L.tileLayer("https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png", {
+        attribution:
+          '&copy; <a href="https://www.openstreetmap.org/copyright">OSM</a> &copy; <a href="https://carto.com/">CARTO</a>',
+        subdomains: "abcd",
+        maxZoom: 19,
+        noWrap: true,
+      }).addTo(map);
 
-  markersLayer = L.layerGroup().addTo(map);
+      markersLayer = L.layerGroup().addTo(map);
 
-  /* Legend */
-  legendControl = L.control({ position: "bottomright" });
-  legendControl.onAdd = function () {
-    const div = L.DomUtil.create("div", "legend");
-    div.innerHTML = `
+      /* Legend */
+      legendControl = L.control({ position: "bottomright" });
+      legendControl.onAdd = function () {
+        const div = L.DomUtil.create("div", "legend");
+        div.innerHTML = `
       <div class="legend-title">Status</div>
       <div class="legend-item"><span class="legend-dot" style="background:${C_LATEST}"></span> Latest version</div>
       <div class="legend-item"><span class="legend-dot" style="background:${C_IN_PROGRESS}"></span> Rollout in progress</div>
       <div class="legend-item"><span class="legend-dot" style="background:${C_OLDER}"></span> Older version</div>
     `;
-    return div;
-  };
-  legendControl.addTo(map);
-}
-
-/* ───────────────────────────────────────────────
-   Data helpers
-   ─────────────────────────────────────────────── */
-
-/** Collect all regions for a given section + component. Returns flat array. */
-function getRegions(sectionKey, componentKey) {
-  const comp = appData.Sections[sectionKey]?.Components?.[componentKey];
-  if (!comp?.RegionalStatuses) return [];
-  return Object.values(comp.RegionalStatuses).flat();
-}
-
-/** Collect all unique version strings (Current + Recent) for a section/component, sorted descending. */
-function getVersions(regions) {
-  const set = new Set();
-  for (const r of regions) {
-    if (r.Current?.Version) set.add(r.Current.Version);
-    for (const h of r.Recent || []) {
-      if (h.Version) set.add(h.Version);
+        return div;
+      };
+      legendControl.addTo(map);
     }
-  }
-  return [...set].sort().reverse();
-}
 
-/** Determine marker color for a region given the selected target version. */
-function regionColor(region, targetVersion) {
-  if (region.InProgress) return C_IN_PROGRESS;
-  if (region.Current?.Version === targetVersion) return C_LATEST;
-  /* Compare lexicographically — works for AKS version formats */
-  if (region.Current?.Version > targetVersion) return C_LATEST;
-  return C_OLDER;
-}
+    /* ───────────────────────────────────────────────
+       Data helpers
+       ─────────────────────────────────────────────── */
 
-/* ───────────────────────────────────────────────
-   Populate Selects
-   ─────────────────────────────────────────────── */
+    /** Collect all regions for a given section + component. Returns flat array. */
+    function getRegions(sectionKey, componentKey) {
+      const comp = appData.Sections[sectionKey]?.Components?.[componentKey];
+      if (!comp?.RegionalStatuses) return [];
+      return Object.values(comp.RegionalStatuses).flat();
+    }
 
-function populateSections() {
-  const sel = document.getElementById("section-select");
-  sel.innerHTML = "";
-  const keys = Object.keys(appData.Sections).filter((k) => {
-    const s = appData.Sections[k];
-    return s.Components && Object.keys(s.Components).some(
-      (c) => s.Components[c].RegionalStatuses && Object.keys(s.Components[c].RegionalStatuses).length > 0
-    );
-  });
+    /** Collect all unique version strings (Current + Recent) for a section/component, sorted descending. */
+    function getVersions(regions) {
+      const set = new Set();
+      for (const r of regions) {
+        if (r.Current?.Version) set.add(r.Current.Version);
+        for (const h of r.Recent || []) {
+          if (h.Version) set.add(h.Version);
+        }
+      }
+      return [...set].sort().reverse();
+    }
 
-  for (const key of keys) {
-    const opt = document.createElement("option");
-    opt.value = key;
-    opt.textContent = SECTION_LABELS[key] || key;
-    sel.appendChild(opt);
-  }
+    /** Determine marker color for a region given the selected target version. */
+    function regionColor(region, targetVersion) {
+      if (region.InProgress) return C_IN_PROGRESS;
+      if (region.Current?.Version === targetVersion) return C_LATEST;
+      /* Compare lexicographically — works for AKS version formats */
+      if (region.Current?.Version > targetVersion) return C_LATEST;
+      return C_OLDER;
+    }
 
-  /* Default to RP if available */
-  if (keys.includes("RP")) sel.value = "RP";
-}
+    /* ───────────────────────────────────────────────
+       Populate Selects
+       ─────────────────────────────────────────────── */
 
-function populateComponents() {
-  const sectionKey = document.getElementById("section-select").value;
-  const section = appData.Sections[sectionKey];
-  const sel = document.getElementById("component-select");
-  sel.innerHTML = "";
+    function populateSections() {
+      const sel = document.getElementById("section-select");
+      sel.innerHTML = "";
+      const keys = Object.keys(appData.Sections).filter((k) => {
+        const s = appData.Sections[k];
+        return s.Components && Object.keys(s.Components).some(
+          (c) => s.Components[c].RegionalStatuses && Object.keys(s.Components[c].RegionalStatuses).length > 0
+        );
+      });
 
-  if (!section?.Components) return;
+      for (const key of keys) {
+        const opt = document.createElement("option");
+        opt.value = key;
+        opt.textContent = SECTION_LABELS[key] || key;
+        sel.appendChild(opt);
+      }
 
-  const compKeys = Object.keys(section.Components);
-  for (const key of compKeys) {
-    const opt = document.createElement("option");
-    opt.value = key;
-    opt.textContent = key;
-    sel.appendChild(opt);
-  }
+      /* Default to RP if available */
+      if (keys.includes("RP")) sel.value = "RP";
+    }
 
-  /* Default to the section's DefaultComponent if present */
-  if (section.DefaultComponent && compKeys.includes(section.DefaultComponent)) {
-    sel.value = section.DefaultComponent;
-  }
-}
+    function populateComponents() {
+      const sectionKey = document.getElementById("section-select").value;
+      const section = appData.Sections[sectionKey];
+      const sel = document.getElementById("component-select");
+      sel.innerHTML = "";
 
-function populateVersions() {
-  const sectionKey = document.getElementById("section-select").value;
-  const componentKey = document.getElementById("component-select").value;
-  const regions = getRegions(sectionKey, componentKey);
-  const versions = getVersions(regions);
-  const sel = document.getElementById("version-select");
-  sel.innerHTML = "";
+      if (!section?.Components) return;
 
-  for (const v of versions) {
-    const opt = document.createElement("option");
-    opt.value = v;
-    opt.textContent = v;
-    sel.appendChild(opt);
-  }
-}
+      const compKeys = Object.keys(section.Components);
+      for (const key of compKeys) {
+        const opt = document.createElement("option");
+        opt.value = key;
+        opt.textContent = key;
+        sel.appendChild(opt);
+      }
 
-/* ───────────────────────────────────────────────
-   Render Map Markers
-   ─────────────────────────────────────────────── */
+      /* Default to the section's DefaultComponent if present */
+      if (section.DefaultComponent && compKeys.includes(section.DefaultComponent)) {
+        sel.value = section.DefaultComponent;
+      }
+    }
 
-function render() {
-  markersLayer.clearLayers();
+    function populateVersions() {
+      const sectionKey = document.getElementById("section-select").value;
+      const componentKey = document.getElementById("component-select").value;
+      const regions = getRegions(sectionKey, componentKey);
+      const versions = getVersions(regions);
+      const sel = document.getElementById("version-select");
+      sel.innerHTML = "";
 
-  const sectionKey = document.getElementById("section-select").value;
-  const componentKey = document.getElementById("component-select").value;
-  const targetVersion = document.getElementById("version-select").value;
-  const regions = getRegions(sectionKey, componentKey);
+      for (const v of versions) {
+        const opt = document.createElement("option");
+        opt.value = v;
+        opt.textContent = v;
+        sel.appendChild(opt);
+      }
+    }
 
-  let countLatest = 0;
-  let countProgress = 0;
-  let countOlder = 0;
+    /* ───────────────────────────────────────────────
+       Render Map Markers
+       ─────────────────────────────────────────────── */
 
-  for (const region of regions) {
-    const coords = REGION_COORDS[region.RegionName];
-    if (!coords) continue;
+    function render() {
+      markersLayer.clearLayers();
 
-    const color = regionColor(region, targetVersion);
-    if (color === C_LATEST) countLatest++;
-    else if (color === C_IN_PROGRESS) countProgress++;
-    else countOlder++;
+      const sectionKey = document.getElementById("section-select").value;
+      const componentKey = document.getElementById("component-select").value;
+      const targetVersion = document.getElementById("version-select").value;
+      const regions = getRegions(sectionKey, componentKey);
 
-    const marker = L.circleMarker(coords, {
-      radius: 7,
-      fillColor: color,
-      color: "#fff",
-      weight: 1,
-      opacity: 0.7,
-      fillOpacity: 0.85,
-    });
+      let countLatest = 0;
+      let countProgress = 0;
+      let countOlder = 0;
 
-    marker.bindTooltip(region.RegionName, {
-      direction: "top",
-      offset: [0, -8],
-      className: "",
-    });
+      for (const region of regions) {
+        const coords = REGION_COORDS[region.RegionName];
+        if (!coords) continue;
 
-    /* Popup */
-    const releaseNote = region.Current?.ReleaseNote;
-    const noteLink = releaseNote
-      ? `<a class="popup-link" href="${encodeURI(releaseNote)}" target="_blank" rel="noopener">Release Notes ↗</a>`
-      : "—";
+        const color = regionColor(region, targetVersion);
+        if (color === C_LATEST) countLatest++;
+        else if (color === C_IN_PROGRESS) countProgress++;
+        else countOlder++;
 
-    const statusLabel =
-      region.InProgress
-        ? '<span style="color:#f59e0b">⟳ In Progress</span>'
-        : color === C_LATEST
-        ? '<span style="color:#22c55e">✓ Latest</span>'
-        : '<span style="color:#64748b">▪ Older</span>';
+        const marker = L.circleMarker(coords, {
+          radius: 7,
+          fillColor: color,
+          color: "#475569",
+          weight: 1,
+          opacity: 0.5,
+          fillOpacity: 0.85,
+        });
 
-    marker.bindPopup(`
+        marker.bindTooltip(region.RegionName, {
+          direction: "top",
+          offset: [0, -8],
+          className: "",
+        });
+
+        /* Popup */
+        const releaseNote = region.Current?.ReleaseNote;
+        const noteLink = releaseNote
+          ? `<a class="popup-link" href="${encodeURI(releaseNote)}" target="_blank" rel="noopener">Release Notes ↗</a>`
+          : "—";
+
+        const statusLabel =
+          region.InProgress
+            ? '<span style="color:#f59e0b">⟳ In Progress</span>'
+            : color === C_LATEST
+              ? '<span style="color:#22c55e">✓ Latest</span>'
+              : '<span style="color:#64748b">▪ Older</span>';
+
+        marker.bindPopup(`
       <div class="popup-region">${region.RegionName}</div>
       <div class="popup-row"><span class="popup-label">Version</span><span class="popup-value">${region.Current?.Version || "—"}</span></div>
       <div class="popup-row"><span class="popup-label">Status</span>${statusLabel}</div>
@@ -568,66 +644,85 @@ function render() {
       <div class="popup-row"><span class="popup-label">Notes</span>${noteLink}</div>
     `, { maxWidth: 300 });
 
-    markersLayer.addLayer(marker);
-  }
+        markersLayer.addLayer(marker);
+      }
 
-  /* Summary */
-  const bar = document.getElementById("summary-bar");
-  bar.innerHTML = `
+      /* Summary */
+      const bar = document.getElementById("summary-bar");
+      bar.innerHTML = `
     <span class="summary-stat"><span class="summary-dot" style="background:${C_LATEST}"></span>${countLatest} latest</span>
     <span class="summary-stat"><span class="summary-dot" style="background:${C_IN_PROGRESS}"></span>${countProgress} in progress</span>
     <span class="summary-stat"><span class="summary-dot" style="background:${C_OLDER}"></span>${countOlder} older</span>
     <span class="badge badge-time">Updated ${new Date(appData.LastUpdateTime).toLocaleString()}</span>
   `;
-}
+    }
 
-/* ───────────────────────────────────────────────
-   Event Wiring
-   ─────────────────────────────────────────────── */
+    /* ───────────────────────────────────────────────
+       Event Wiring
+       ─────────────────────────────────────────────── */
 
-document.getElementById("section-select").addEventListener("change", () => {
-  populateComponents();
-  populateVersions();
-  render();
-});
+    document.getElementById("section-select").addEventListener("change", () => {
+      populateComponents();
+      populateVersions();
+      render();
+    });
 
-document.getElementById("component-select").addEventListener("change", () => {
-  populateVersions();
-  render();
-});
+    document.getElementById("component-select").addEventListener("change", () => {
+      populateVersions();
+      render();
+    });
 
-document.getElementById("version-select").addEventListener("change", () => {
-  render();
-});
+    document.getElementById("version-select").addEventListener("change", () => {
+      render();
+    });
 
-/* ───────────────────────────────────────────────
-   Bootstrap
-   ─────────────────────────────────────────────── */
+    /* ───────────────────────────────────────────────
+       Bootstrap
+       ─────────────────────────────────────────────── */
 
-async function main() {
-  try {
-    initMap();
-    const resp = await fetch("data/parsed_data.json");
-    if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
-    appData = await resp.json();
+    async function main() {
+      try {
+        initMap();
+        const resp = await fetch("data/parsed_data.json");
+        if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+        appData = await resp.json();
 
-    populateSections();
-    populateComponents();
-    populateVersions();
-    render();
+        populateSections();
+        populateComponents();
+        populateVersions();
+        render();
 
-    document.getElementById("loading").remove();
-  } catch (err) {
-    document.getElementById("loading").innerHTML = `
+        document.getElementById("loading").remove();
+
+        /* Show user's location */
+        if (navigator.geolocation) {
+          navigator.geolocation.getCurrentPosition((pos) => {
+            const { latitude, longitude } = pos.coords;
+            L.marker([latitude, longitude], {
+              icon: L.divIcon({
+                className: "",
+                html: '<div style="position:relative;width:20px;height:20px;"><div style="position:absolute;inset:0;background:rgba(37,99,235,0.25);border-radius:50%;animation:pulse-ring 1.5s ease-out infinite;"></div><div style="position:absolute;top:4px;left:4px;width:12px;height:12px;background:#2563eb;border:2.5px solid #fff;border-radius:50%;box-shadow:0 0 8px rgba(37,99,235,0.6);"></div></div><style>@keyframes pulse-ring{0%{transform:scale(1);opacity:1}100%{transform:scale(2.2);opacity:0}}</style>',
+                iconSize: [20, 20],
+                iconAnchor: [10, 10],
+              }),
+              zIndexOffset: 1000,
+            })
+              .addTo(map)
+              .bindTooltip("You are here", { direction: "top", offset: [0, -10] });
+          });
+        }
+      } catch (err) {
+        document.getElementById("loading").innerHTML = `
       <div class="error-message">
         <h2>Failed to load data</h2>
         <p>${err.message}. Please try refreshing the page.</p>
       </div>
     `;
-  }
-}
+      }
+    }
 
-main();
-</script>
+    main();
+  </script>
 </body>
+
 </html>

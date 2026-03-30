@@ -8,7 +8,7 @@
             "type": "msedge",
             "request": "launch",
             "name": "Open index.html",
-            "file": "/workspaces/aks-release-tracker-map/index.html"
+            "file": "index.html"
         }
     ]
 }
