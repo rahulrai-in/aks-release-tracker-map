@@ -246,6 +246,22 @@
       text-decoration: underline;
     }
 
+    .popup-version-links {
+      display: block;
+      margin-top: 2px;
+      line-height: 1.7;
+      word-break: break-word;
+    }
+
+    .popup-version-links a {
+      color: #2563eb;
+      text-decoration: none;
+    }
+
+    .popup-version-links a:hover {
+      text-decoration: underline;
+    }
+
     /* ─── Loading state ─── */
     .loading-overlay {
       position: absolute;
@@ -808,6 +824,18 @@
       return [...set].sort().reverse();
     }
 
+    /** Strip HTML tags from a string, returning plain text. */
+    function stripHtml(str) {
+      const tmp = document.createElement("div");
+      tmp.innerHTML = str;
+      return tmp.textContent || tmp.innerText || str;
+    }
+
+    /** Check if a string contains HTML tags. */
+    function containsHtml(str) {
+      return /<[a-z][\s\S]*>/i.test(str);
+    }
+
     /** Determine marker color for a region given the selected target version. */
     function regionColor(region, targetVersion) {
       if (region.InProgress) return C_IN_PROGRESS;
@@ -875,7 +903,8 @@
       for (const v of versions) {
         const opt = document.createElement("option");
         opt.value = v;
-        opt.textContent = v;
+        const plain = containsHtml(v) ? stripHtml(v) : v;
+        opt.textContent = plain.length > 80 ? plain.slice(0, 77) + "…" : plain;
         sel.appendChild(opt);
       }
     }
@@ -933,13 +962,18 @@
               ? '<span style="color:#22c55e">✓ Latest</span>'
               : '<span style="color:#64748b">▪ Older</span>';
 
+        const versionRaw = region.Current?.Version || "—";
+        const versionHtml = containsHtml(versionRaw)
+          ? `<span class="popup-value popup-version-links">${versionRaw}</span>`
+          : `<span class="popup-value">${versionRaw}</span>`;
+
         marker.bindPopup(`
       <div class="popup-region">${region.RegionName}</div>
-      <div class="popup-row"><span class="popup-label">Version</span><span class="popup-value">${region.Current?.Version || "—"}</span></div>
+      <div class="popup-row"><span class="popup-label">Version</span>${versionHtml}</div>
       <div class="popup-row"><span class="popup-label">Status</span>${statusLabel}</div>
       <div class="popup-row"><span class="popup-label">Batch</span><span class="popup-value">${region.BatchIndex ?? "—"}</span></div>
       <div class="popup-row"><span class="popup-label">Notes</span>${noteLink}</div>
-    `, { maxWidth: 300 });
+    `, { maxWidth: 420 });
 
         markersLayer.addLayer(marker);
       }
