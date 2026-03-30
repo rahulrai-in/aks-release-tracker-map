@@ -30,58 +30,67 @@
     header {
       background: linear-gradient(135deg, #1e3a5f 0%, #2563eb 100%);
       border-bottom: none;
-      padding: 12px 24px;
+      padding: 10px 20px;
       display: flex;
       align-items: center;
-      gap: 20px;
+      gap: 16px;
       flex-wrap: wrap;
       z-index: 1000;
       box-shadow: 0 2px 12px rgba(37, 99, 235, 0.15);
     }
 
     header h1 {
-      font-size: 18px;
+      font-size: 17px;
       font-weight: 700;
       color: #ffffff;
       white-space: nowrap;
       letter-spacing: -0.3px;
+      flex-shrink: 0;
     }
 
     .controls {
       display: flex;
-      align-items: center;
-      gap: 12px;
-      flex-wrap: wrap;
+      align-items: stretch;
+      gap: 1px;
+      background: rgba(255, 255, 255, 0.08);
+      border-radius: 8px;
+      overflow: hidden;
     }
 
     .control-group {
       display: flex;
       align-items: center;
-      gap: 6px;
-      background: rgba(255, 255, 255, 0.12);
-      border-radius: 8px;
-      padding: 4px 10px 4px 12px;
+      gap: 8px;
+      background: rgba(255, 255, 255, 0.10);
+      border-radius: 0;
+      padding: 5px 12px;
+      transition: background 0.15s;
+    }
+
+    .control-group:hover {
+      background: rgba(255, 255, 255, 0.18);
     }
 
     .control-group label {
-      font-size: 11px;
-      color: rgba(255, 255, 255, 0.7);
+      font-size: 10px;
+      color: rgba(255, 255, 255, 0.55);
       white-space: nowrap;
       text-transform: uppercase;
       letter-spacing: 0.5px;
       font-weight: 600;
+      flex-shrink: 0;
     }
 
     select {
-      background: rgba(255, 255, 255, 0.15);
+      background: transparent;
       color: #ffffff;
-      border: 1px solid rgba(255, 255, 255, 0.25);
-      border-radius: 6px;
-      padding: 5px 10px;
+      border: none;
+      border-radius: 4px;
+      padding: 3px 4px;
       font-size: 13px;
+      font-weight: 500;
       cursor: pointer;
       outline: none;
-      max-width: 260px;
     }
 
     select option {
@@ -90,13 +99,12 @@
     }
 
     select:hover {
-      border-color: rgba(255, 255, 255, 0.5);
-      background: rgba(255, 255, 255, 0.22);
+      background: rgba(255, 255, 255, 0.08);
     }
 
     select:focus {
-      border-color: rgba(255, 255, 255, 0.6);
-      box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.15);
+      background: rgba(255, 255, 255, 0.12);
+      box-shadow: 0 0 0 1.5px rgba(255, 255, 255, 0.2);
     }
 
     .badge {
@@ -167,10 +175,11 @@
     .summary-bar {
       display: flex;
       align-items: center;
-      gap: 16px;
+      gap: 12px;
       margin-left: auto;
-      font-size: 12px;
+      font-size: 11px;
       color: rgba(255, 255, 255, 0.9);
+      flex-shrink: 0;
     }
 
     .summary-stat {
@@ -294,6 +303,251 @@
       font-size: 13px;
       color: #64748b;
     }
+
+    /* ─── Release Order Toggle ─── */
+    .control-group.toggle-group {
+      cursor: pointer;
+      user-select: none;
+      flex: 0 0 auto;
+      justify-content: center;
+    }
+
+    .toggle-group label {
+      font-size: 10px;
+      color: rgba(255, 255, 255, 0.55);
+      white-space: nowrap;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .toggle-switch {
+      position: relative;
+      width: 34px;
+      height: 18px;
+      flex-shrink: 0;
+    }
+
+    .toggle-switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    .toggle-slider {
+      position: absolute;
+      inset: 0;
+      background: rgba(255, 255, 255, 0.25);
+      border-radius: 9px;
+      transition: background 0.2s;
+      cursor: pointer;
+    }
+
+    .toggle-slider::before {
+      content: '';
+      position: absolute;
+      top: 2px;
+      left: 2px;
+      width: 14px;
+      height: 14px;
+      background: #fff;
+      border-radius: 50%;
+      transition: transform 0.2s;
+    }
+
+    .toggle-switch input:checked+.toggle-slider {
+      background: #22c55e;
+    }
+
+    .toggle-switch input:checked+.toggle-slider::before {
+      transform: translateX(16px);
+    }
+
+    /* ─── Batch Number Labels ─── */
+    .batch-label {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      color: #fff;
+      font-size: 11px;
+      font-weight: 700;
+      border: 2px solid #fff;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+      line-height: 1;
+    }
+
+    /* ─── Release Order Panel ─── */
+    .release-order-panel {
+      position: absolute;
+      bottom: 24px;
+      left: 16px;
+      z-index: 1000;
+      background: rgba(255, 255, 255, 0.97);
+      backdrop-filter: blur(8px);
+      border: 1px solid #e2e8f0;
+      border-radius: 10px;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+      max-height: 360px;
+      width: 380px;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      transition: opacity 0.2s, transform 0.2s;
+    }
+
+    .release-order-panel.hidden {
+      display: none;
+    }
+
+    .release-order-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 14px;
+      border-bottom: 1px solid #e2e8f0;
+      background: #f8fafc;
+      border-radius: 10px 10px 0 0;
+      flex-shrink: 0;
+    }
+
+    .release-order-header h3 {
+      font-size: 13px;
+      font-weight: 600;
+      color: #1e293b;
+      margin: 0;
+    }
+
+    .release-order-collapse {
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: #64748b;
+      font-size: 16px;
+      padding: 2px 4px;
+      border-radius: 4px;
+      line-height: 1;
+    }
+
+    .release-order-collapse:hover {
+      background: #e2e8f0;
+    }
+
+    .release-order-body {
+      overflow-y: auto;
+      padding: 6px 0;
+    }
+
+    .release-order-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 12px;
+    }
+
+    .release-order-table th {
+      position: sticky;
+      top: 0;
+      background: #f8fafc;
+      text-align: left;
+      padding: 6px 12px;
+      color: #64748b;
+      font-weight: 600;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.3px;
+      border-bottom: 1px solid #e2e8f0;
+    }
+
+    .release-order-table td {
+      padding: 5px 12px;
+      border-bottom: 1px solid #f1f5f9;
+      vertical-align: top;
+    }
+
+    .release-order-table tr:last-child td {
+      border-bottom: none;
+    }
+
+    .release-order-table tr:hover td {
+      background: #f1f5f9;
+    }
+
+    .release-order-table tr.highlighted td {
+      background: #eff6ff;
+    }
+
+    .batch-num {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      color: #fff;
+      font-size: 11px;
+      font-weight: 700;
+    }
+
+    .batch-status {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-weight: 500;
+      font-size: 11px;
+    }
+
+    .batch-status-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+    }
+
+    .batch-regions-list {
+      color: #475569;
+      line-height: 1.5;
+    }
+
+    .batch-regions-more {
+      color: #2563eb;
+      cursor: pointer;
+      font-size: 11px;
+    }
+
+    .batch-regions-more:hover {
+      text-decoration: underline;
+    }
+
+    /* ─── Responsive ─── */
+    @media (max-width: 1100px) {
+      .summary-bar {
+        display: none;
+      }
+    }
+
+    @media (max-width: 860px) {
+      header {
+        padding: 8px 12px;
+        gap: 8px;
+      }
+
+      header h1 {
+        font-size: 15px;
+      }
+
+      .controls {
+        flex-direction: column;
+        gap: 1px;
+        width: 100%;
+      }
+
+      .control-group {
+        width: 100%;
+        flex: unset;
+      }
+    }
   </style>
 </head>
 
@@ -314,11 +568,37 @@
         <label for="version-select">Version</label>
         <select id="version-select"></select>
       </div>
+      <div class="control-group toggle-group" onclick="document.getElementById('release-order-toggle').click()">
+        <label for="release-order-toggle">Release Order</label>
+        <span class="toggle-switch">
+          <input type="checkbox" id="release-order-toggle" onclick="event.stopPropagation()" />
+          <span class="toggle-slider"></span>
+        </span>
+      </div>
     </div>
     <div class="summary-bar" id="summary-bar"></div>
   </header>
 
   <div id="map"></div>
+
+  <div class="release-order-panel hidden" id="release-order-panel">
+    <div class="release-order-header">
+      <h3>Release Order</h3>
+      <button class="release-order-collapse" id="release-order-collapse" title="Collapse">&#x2715;</button>
+    </div>
+    <div class="release-order-body">
+      <table class="release-order-table">
+        <thead>
+          <tr>
+            <th>Order</th>
+            <th>Regions</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody id="release-order-tbody"></tbody>
+      </table>
+    </div>
+  </div>
 
   <div class="loading-overlay" id="loading">
     <div class="spinner"></div>
@@ -429,6 +709,20 @@
     const C_IN_PROGRESS = "#f59e0b"; // amber
     const C_OLDER = "#64748b"; // slate gray
 
+    /* Batch sequence colour palette — warm→cool gradient for early→late */
+    const BATCH_COLORS = [
+      "#dc2626", // 1 – red
+      "#ea580c", // 2 – orange
+      "#d97706", // 3 – amber
+      "#ca8a04", // 4 – yellow
+      "#65a30d", // 5 – lime
+      "#16a34a", // 6 – green
+      "#0d9488", // 7 – teal
+      "#2563eb", // 8 – blue
+      "#7c3aed", // 9 – violet
+    ];
+    function batchColor(index) { return BATCH_COLORS[(index - 1) % BATCH_COLORS.length] || "#64748b"; }
+
     /* ───────────────────────────────────────────────
        App State
        ─────────────────────────────────────────────── */
@@ -436,6 +730,8 @@
     let map = null;
     let markersLayer = null;
     let legendControl = null;
+    let releaseOrderLayer = null;
+    let releaseOrderActive = false;
 
     /* ───────────────────────────────────────────────
        Initialise Leaflet Map
@@ -472,6 +768,7 @@
       }).addTo(map);
 
       markersLayer = L.layerGroup().addTo(map);
+      releaseOrderLayer = L.layerGroup().addTo(map);
 
       /* Legend */
       legendControl = L.control({ position: "bottomright" });
@@ -655,6 +952,144 @@
     <span class="summary-stat"><span class="summary-dot" style="background:${C_OLDER}"></span>${countOlder} older</span>
     <span class="badge badge-time">Updated ${new Date(appData.LastUpdateTime).toLocaleString()}</span>
   `;
+
+      /* Update release order overlay if active */
+      renderReleaseOrder();
+    }
+
+    /* ───────────────────────────────────────────────
+       Release Order Visualisation
+       ─────────────────────────────────────────────── */
+
+    /** Build batch data: { batchIndex → { regions[], centroid, status } } */
+    function getBatchData(regions, targetVersion) {
+      const batches = {};
+      for (const region of regions) {
+        const b = region.BatchIndex;
+        if (b == null) continue;
+        if (!batches[b]) batches[b] = { regions: [], allFinished: true, anyInProgress: false };
+        batches[b].regions.push(region);
+        if (region.InProgress) {
+          batches[b].anyInProgress = true;
+          batches[b].allFinished = false;
+        } else {
+          const color = regionColor(region, targetVersion);
+          if (color !== C_LATEST) batches[b].allFinished = false;
+        }
+      }
+
+      /* Compute centroid for each batch */
+      for (const b of Object.keys(batches)) {
+        let latSum = 0, lngSum = 0, count = 0;
+        for (const r of batches[b].regions) {
+          const c = REGION_COORDS[r.RegionName];
+          if (c) { latSum += c[0]; lngSum += c[1]; count++; }
+        }
+        batches[b].centroid = count ? [latSum / count, lngSum / count] : null;
+      }
+      return batches;
+    }
+
+    /** Render batch number labels + flow arrows on the map */
+    function renderReleaseOrder() {
+      releaseOrderLayer.clearLayers();
+      if (!releaseOrderActive) {
+        document.getElementById("release-order-panel").classList.add("hidden");
+        return;
+      }
+
+      const sectionKey = document.getElementById("section-select").value;
+      const componentKey = document.getElementById("component-select").value;
+      const targetVersion = document.getElementById("version-select").value;
+      const regions = getRegions(sectionKey, componentKey);
+      const batches = getBatchData(regions, targetVersion);
+      const sortedKeys = Object.keys(batches).map(Number).sort((a, b) => a - b);
+
+      /* Batch number labels on each region marker */
+      for (const b of sortedKeys) {
+        const bg = batchColor(b);
+        for (const region of batches[b].regions) {
+          const coords = REGION_COORDS[region.RegionName];
+          if (!coords) continue;
+          const label = L.marker(coords, {
+            icon: L.divIcon({
+              className: "",
+              html: `<div class="batch-label" style="background:${bg}">${b}</div>`,
+              iconSize: [22, 22],
+              iconAnchor: [11, 11],
+            }),
+            interactive: false,
+            zIndexOffset: 500,
+          });
+          releaseOrderLayer.addLayer(label);
+        }
+      }
+
+      /* Populate the panel table */
+      const tbody = document.getElementById("release-order-tbody");
+      tbody.innerHTML = "";
+      for (const b of sortedKeys) {
+        const batch = batches[b];
+        const regionNames = batch.regions.map(r => r.RegionName).sort();
+        const maxShow = 3;
+        let regionsHtml;
+        if (regionNames.length <= maxShow) {
+          regionsHtml = regionNames.join(", ");
+        } else {
+          const shown = regionNames.slice(0, maxShow).join(", ");
+          const rest = regionNames.slice(maxShow);
+          regionsHtml = `${shown} <span class="batch-regions-more" data-batch="${b}" onclick="this.parentElement.innerHTML=this.parentElement.getAttribute('data-full')">(+${rest.length} more)</span>`;
+        }
+
+        let statusColor, statusText;
+        if (batch.anyInProgress) {
+          statusColor = C_IN_PROGRESS; statusText = "In Progress";
+        } else if (batch.allFinished) {
+          statusColor = C_LATEST; statusText = "Finished";
+        } else {
+          statusColor = C_OLDER; statusText = "Pending";
+        }
+
+        const bg = batchColor(b);
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+          <td><span class="batch-num" style="background:${bg}">${b}</span></td>
+          <td><span class="batch-regions-list" data-full="${regionNames.join(', ')}">${regionsHtml}</span></td>
+          <td><span class="batch-status"><span class="batch-status-dot" style="background:${statusColor}"></span>${statusText}</span></td>
+        `;
+
+        /* Hover to highlight regions on the map */
+        tr.addEventListener("mouseenter", () => {
+          tr.classList.add("highlighted");
+          for (const region of batch.regions) {
+            const coords = REGION_COORDS[region.RegionName];
+            if (!coords) continue;
+            const highlight = L.circleMarker(coords, {
+              radius: 14,
+              fillColor: "#2563eb",
+              color: "#2563eb",
+              weight: 2,
+              opacity: 0.6,
+              fillOpacity: 0.15,
+              className: "batch-highlight-" + b,
+              interactive: false,
+            });
+            highlight._isBatchHighlight = true;
+            releaseOrderLayer.addLayer(highlight);
+          }
+        });
+
+        tr.addEventListener("mouseleave", () => {
+          tr.classList.remove("highlighted");
+          releaseOrderLayer.eachLayer(l => {
+            if (l._isBatchHighlight) releaseOrderLayer.removeLayer(l);
+          });
+        });
+
+        tbody.appendChild(tr);
+      }
+
+      document.getElementById("release-order-panel").classList.remove("hidden");
     }
 
     /* ───────────────────────────────────────────────
@@ -674,6 +1109,17 @@
 
     document.getElementById("version-select").addEventListener("change", () => {
       render();
+    });
+
+    document.getElementById("release-order-toggle").addEventListener("change", (e) => {
+      releaseOrderActive = e.target.checked;
+      renderReleaseOrder();
+    });
+
+    document.getElementById("release-order-collapse").addEventListener("click", () => {
+      document.getElementById("release-order-toggle").checked = false;
+      releaseOrderActive = false;
+      renderReleaseOrder();
     });
 
     /* ───────────────────────────────────────────────
